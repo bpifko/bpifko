@@ -1,82 +1,245 @@
+# Shoutout to the u/Gandalf-bot for help on sentience!
+# 3/18/20 Edit 1: Added more quotes
 import praw
 import config
 import random
 import time
 import os
+
+
 def bot_login():
-    r = praw.Reddit(username = config.username,
-            password = config.password,
-            client_id = config.client_id,
-            client_secret = config.client_secret,
-            user_agent = "created by farrygodjd to comment")
+    r = praw.Reddit(username=config.username,
+                    password=config.password,
+                    client_id=config.client_id,
+                    client_secret=config.client_secret,
+                    user_agent="created by farrygodjd to comment")
     return r
-keywords = ['Aragorn' , 'aragorn' , 'Gondor' , 'gondor' , 'Ranger' , 'ranger' , 'dunedain' , 'Dunedain']
+
+
+# these are contain possiblkeywords. For simplicity sake I made the name of each string/variable thingy related, but all that matters is that the first step will look for a comment containing something inside my first variable/string thingy, which naturally is Aragorn, then afterwords it proceeds to look for any other words that should get a special phrase every time.
+aragorn = ['Aragorn', 'aragorn']  # for example first look for Aragorn, aragorn
+gondor_aragorn = ['Gondor', 'gondor', 'realm', 'white']
+beacons = ['beacons', 'Beacons', ]
+breakfast = ['breakfast', 'Breakfast', 'second',
+             'Second']  # Nothing in LOTR was worse than the war of Aragorn vs Second Breakfast
+Caradhras = ['Caradhras', 'caradhras', 'mountain', 'Mountain', 'Saruman']
+Gate = ['Black', 'black', 'Gate', 'gate']
+axe = ['Sword', 'sword']
+hope = ['Hope', 'hope']
+Strider = ['Strider', 'strider']
+humor = ['Penis', 'penis', 'dick', 'Dick']
+
 
 def run_bot(r, comment_replied_to):
     for comment in r.subreddit('lotrmemes').comments(limit=25):
-        for keyword in keywords:
+        for keyword in aragorn:  # look first for Aragorn if found then look for the any of the following otherwise proceed to last phase, just Aragorn
             if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
-                print( "aragorn has been found")
-                list = ['[I WOULD HAVE GONE WITH YOU TO THE END INTO THE VERY FIRES OF MORDOR!](https://www.youtube.com/watch?v=F2S2GCqCFTA)',
-                        '[NOT IF WE HOLD TRUE TO EACH OTHER!](https://www.youtube.com/watch?v=MQcfsB0vyak)', '[I THOUGHT I HAD WANDERED INTO A DREAM!](https://www.youtube.com/watch?v=6jvNTLSIcAM)',
-                        '[I WILL NOT LET THE WHITE CITY FALL NOR OUR PEOPLE FAIL!](https://www.youtube.com/watch?v=V5iPWmNhR28)', '[FOR FRODO!!](https://www.youtube.com/watch?v=ufhcNPXD9Hc)',
-                        '[IF BY MY LIFE OR DEATH I CAN PROTECT YOU I WILL!](https://www.youtube.com/watch?v=hyquiA8RL1Q)',
-                        '[YOU HAVE MY SWORD!](https://www.youtube.com/watch?v=hyquiA8RL1Q)', '[I DO NOT FEAR DEATH!](https://www.youtube.com/watch?v=r2vYRQlS2aQ)',
-                        '[MY FRIENDS YOU BOW TO NO ONE!](https://www.youtube.com/watch?v=13J1mAGNUls)' , 'BUT I MUST ADMIT THAT I HOPED YOU WOULD TAKE TO ME FOR MY OWN SAKE. A HUNTED MAN SOMETIMES WEARIES OF DISTRUST AND LONGS FOR FRIENDSHIP. BUT THERE, I BELIEVE MY LOOKS ARE AGAINST ME.!' , 'FOR MY PART I FORGIVE YOUR DOUBT. LITTLE DO I RESEMBLE THE FIGURES OF ELENDIL AND ISILDUR AS THEY STAND CARVEN IN THIER MAJESTY IN THE HALLS OF DENETHOR. I AM BUT A HEIR OF ISILDUR, NOT ISILDUR HIMSELF. I HAVE HAD A HARD LIFE AND AND A LONG; AND THE LEAGUES THAT LIE BETWEEN HERE AND GONDOR ARE A SMALL PART IN THE COUNT OF MY JOURNEYS. I HAVE CROSSED MANY MOUNTAINS AND MANY RIVERS AND TRODDEN MANY PLAINS EVER INTO THE FAR COUNTRIES OF RHUN AND HARAD WHERE WHERE THE STARS ARE STRANGE!' ,
-                        '[STAND YOUR GROUND, SONS OF GONDOR OF ROHAN MY BROTHERS. I SEE IN YOUR EYES THE SAME FEAR THAT WOULD TAKE THE HEART OF ME! A DAY MAY COME WHEN THE COURAGE OF MEN FAILS WHEN WE FORSAKE OUR FRIENDS AND BREAK ALL BONDS OF FELLOWSHIP BUT IT IS NOT THIS DAY!AN HOUR OF WOLVES AND SHATTERD SHIELDS WHEN THE AGE OF MEN COMES CRASHING DOWN BUT IT IS NOT THIS DAY, THIS DAY WE FIGHT!!! AND FOR ALL THAT IS DEAR TO YOU IN THIS WORLD I BID YOU STAND MEN OF THE WEST AND FIGHT!!!](https://www.youtube.com/watch?v=SwMUY5ro5Xo) ' ,
-                        '[RIDE OUT WITH ME. RIDE OUT AND MEET THEM.](https://www.youtube.com/watch?v=kzvAAAHVFBI)' , 'LONELY MEN ARE WE RANGERS OF THE WILD. HUNTERS – BUT HUNTERS EVER OF THE SERVANTS OF THE ENEMY; FOR THEY ARE FOUND IN MANY PLACES NOT IN MORDOR ONLY. ”STRIDER” AM I TO ONE FAT MAN WHO LIVES WITHIN A DAY´S MARCH OF FOES THAT WOULD FREEZE HIS HEART OR LAY HIS LITTLE TOWN IN RUIN IF HE WERE NOT GUARDED CEASELESSLY. YET WE WOULD NOT HAVE IT OTHERWISE. IF SIMPLE FOLK ARE FREE FROM CARE AND FEAR, SIMPLE THEY WILL BE AND WE MUST BE SECRET TO KEEP THEM SO. THAT HAS BEEN THE TASK OF MY KINDRED WHILE THE YEARS HAVE LENGTHENED AND THE GRASS HAS GROWN.' , '[War is upon you whether you risk it or not](https://www.youtube.com/watch?v=RaBdoLVJQag)' , '[NOT IF WE HOLD TRUE TO EACH OTHER. WE WILL NOT ABANDON MERRY AND PIPPIN TO TORMENT AND DEATH. NOT WHILE WE HAVE STRENGTH LEFT. LEAVE ALL THAT CAN BE SPARED BEHIND. WE TRAVEL LIGHT. LET’S HUNT SOME ORC !](https://www.youtube.com/watch?v=MQcfsB0vyak)' ,
-                        '[I AM ISILDUR’S HEIR. FIGHT FOR ME! AND I WILL HOLD YOUR OATH FULFILLED! WHAT SAY YOU!?](https://www.youtube.com/watch?v=r622O7Kh4B4)' , '[You will suffer me](https://www.youtube.com/watch?v=r622O7Kh4B4)' ,
-                        'A HUNTED MAN SOMETIMES WEARIES OF DISTRUST AND LONGS FOR FRIENDSHIP. BUT THERE I BELIEVE MY LOOKS ARE AGAINST ME!' , '[BE AT PEACE SON OF GONDOR!!](https://www.youtube.com/watch?v=zcHhlcxUkP4)' ,
-                        'I WOULD HAVE GUIDED FRODO TO MORDOR AND GONE WITH HIM TO THE END!' , '[I DO NOT WANT THAT POWER. I HAVE NEVER WANTED IT!](https://www.youtube.com/watch?v=V1c2tUcL-jY)' , '[LET US TOGETHER REBUILD THIS WORLD THAT WE MAY SHARE IN THE DAYS OF PEACE!](https://www.youtube.com/watch?v=W6t9OF8_3n8)' ,
-                        'THE BEST REVENGE IS LETTING GO AND LIVING WELL!' , 'TIS THE LAY OF LUTHIEN. THE ELF-MAIDEN WHO GAVE HER LOVE TO BEREN A MORTAL!' , '[HES TRYING TO BRING DOWN THE MOUNTAIN! GANDALF WE MUST TURN BACK!](https://www.youtube.com/watch?v=YH4Xr6GIp4U)' ,
-                        '[I SWORE TO PROTECT YOU!](https://www.dailymotion.com/video/x4c1g1z)' , '[THE BEACONS OF MINAS TIRITH! THE BEACONS ARE LIT! GONDOR CALLS FOR AID!](https://www.youtube.com/watch?v=QhRFaY8A9cA)' , '[IT IS BUT A SHADOW AND A THOUGHT THAT YOU LOVE. I CANNOT GIVE YOU WHAT YOU SEEK](https://www.youtube.com/watch?v=KHLXGwjpVqw)' , ' [SAURON WILL NOT HAVE FORGOTTEN THE SWORD OF ELENDIL. THE BLADE THAT WAS BROKEN SHALL RETURN TO MINAS TIRITH!](https://www.youtube.com/watch?v=fsbDigj7w5c)' ,
-                        '[MURDERERS. TRAITORS. YOU WOULD CALL UPON THEM TO FIGHT? THEY BELIEVE IN NOTHING. THEY ANSWER TO NO ONE.](https://www.youtube.com/watch?v=fsbDigj7w5c)' , '[IF SAURON HAD THE RING WE WOULD KNOW IT!](https://www.youtube.com/watch?v=ynftPM-OB7o)' ,
-                        '[NO. THERE IS STILL HOPE FOR FRODO. HE NEEDS TIME... AND SAFE PASSAGE ACROSS THE PLAINS OF GORGOROTH. WE CAN GIVE HIM THAT.](https://www.youtube.com/watch?v=ynftPM-OB7o)' , '[DRAW OUT SAURONS ARMIES. EMPTY HIS LANDS. THEN WE GATHER OUR FULL STRENGTH AND MARCH ON THE BLACK GATE!](https://www.youtube.com/watch?v=ynftPM-OB7o)' ,
-                        '[HOLD YOUR GROUND, HOLD YOUR GROUND. SONS OF GONDOR, OF ROHAN MY BROTHERS. I SEE IN YOUR EYES THE SAME FEAR THAT WOULD TAKE THE HEART OF ME. A DAY MAY COME WHEN THE COURAGE OF MEN FAILS WHEN WE FORSAKE OUR FRIENDS AND BREAK ALL BONDS OF FELLOWSHIP BUT IT IS NOT THIS DAY. AN HOUR OF WOES AND SHATTERED SHIELDS WHEN THE AGE OF MEN COMES CRASHING DOWN BUT IT IS NOT THIS DAY. THIS DAY WE FIGHT! BY ALL THAT YOU HOLD DEAR ON THIS GOOD EARTH I BID YOU STAND, MEN OF THE WEST!](https://www.youtube.com/watch?v=_MsRcq9rvTQ)' ,
-                        '[Let the lord of the Black Lands come forth, that justice be done upon him!](https://www.youtube.com/watch?v=To_RJ_mPNqM)' , ' [We have time. Every day Frodo moves closer to Mordor.](https://www.youtube.com/watch?v=altXWl6JO18)' , ' [THEN I SHALL DIE AS ONE OF THEM!](https://www.youtube.com/watch?v=W8BhTlPZAoM)' , 'MY LADY, THERE MAY COME A TIME FOR VALOR WITHOUT RENOWN. WHO THEN WILL YOUR PEOPLE LOOK TO IN THE LAST DEFENSE?' ,
-                        '[YOU HAVE SOME SKILL WITH A BLADE](https://www.dailymotion.com/video/x4c8xy5)' , '[YOU ARE A DAUGHTER OF KINGS A SHIELD MAIDEN OF ROHAN. I DO NOT THINK THAT WILL BE YOUR FATE!](https://www.youtube.com/watch?v=MTGnbIip_TU)' , '[THEY DO NOT COME TO DESTROY ROHANS CROPS OR VILLAGES. THEY COME TO DESTROY ITS PEOPLE. DOWN TO THE LAST CHILD.](https://www.youtube.com/watch?v=RSYX4ckG4tw)' , '[ITS THE BEARDS!](https://www.youtube.com/watch?v=d-PmAQ9Opu4)' ,
-                        '[OPEN WAR IS UPON YOU WHETHER YOU WOULD RISK IT OR NOT!](https://www.youtube.com/watch?v=RaBdoLVJQag)' , '[FARMERS, FERRIERS, STABLE BOYS. THESE ARE NO SOLDIERS.](https://www.youtube.com/watch?v=W8BhTlPZAoM)' , ' [IT IS AN ARMY BRED FOR A SINGLE PURPOSE, TO DESTROY THE WORLD OF MEN. THEY WILL BE HERE BY NIGHTFALL.](https://www.youtube.com/watch?v=VjxpAOIAsns)' ,
-                        'THEY WERE ONCE MEN. GREAT KINGS OF MEN. THEN SAURON THE DECEIVER GAVE TO THEM NINE RINGS OF POWER. BLINDED BY THEIR GREED, THEY TOOK THEM WITHOUT QUESTION, ONE BY ONE FALLING INTO DARKNESS. NOW THEY ARE SLAVES TO HIS WILL. THEY ARE THE NAZGUL, RINGWRAITHS, NEITHER LIVING NOR DEAD. AT ALL TIMES THEY FEEL THE PRESENCE OF THE RING, DRAWN TO THE POWER OF THE ONE. THEY WILL NEVER STOP HUNTING YOU.']
-                random_item = random.choice(list)
-                comment.reply(random_item)
+                # this is for any thing related to gondor
+                for keyword in gondor_aragorn:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("GONDOR")  # you can ignore this line it is for me
+                        gondor = [
+                            'Stand your ground, sons of Gondor of Rohan my brothers. I see in your eyes the same fear that would take the heart of me! A day may come when the courage of men fails when we forsake our friends and break all bonds of fellowship but it is not this day! An hour of wolves and shattered shields when the age of men comes crashing down but it is not this day, this day we fight!!! And for all that is dear to you in this world I bid you stand men of the west and fight! ',
+                            'Be at peace son of Gondor.',
+                            'THE BEACONS OF MINAS TIRITH! THE BEACONS ARE LIT! GONDOR CALLS FOR AID!',
+                            'You shall not enter the realm of Gondor.',
+                            'I will not let the White city fall nor our people fail',
+                            'There is no strength in Gondor that can avail us']  # these are the quotes that it will say when Gondor is found
+                        random_item = random.choice(gondor)  # choose a random quote from the phrases
+                        comment.reply(random_item)  # reply to the comment
+                        comment_replied_to.append(
+                            comment.id)  # I'm going to be honest I have no idea what the following lines code do. All I know is without it the bot starts to spam
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+
+                # for anything related to the beacons of minas tirith
+                for keyword in beacons:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("Gondor calls ")
+                        comment.reply("THE BEACONS OF MINAS TIRITH! THE BEACONS ARE LIT! GONDOR CALLS FOR AID!")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+
+                # for something related to the Fellowship's journey through the Caradharas
+                for keyword in Caradhras:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("Saruman is bringing the mountain")
+                        comment.reply("HES TRYING TO BRING DOWN THE MOUNTAIN! GANDALF WE MUST TURN BACK!")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                # if someone mentions the second greatest speech (if you think that anything was better Theoden's you are no longer welcome
+                for keyword in Gate:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("I came")
+                        comment.reply(
+                            "Hold your ground, hold your ground. Sons of Gondor, of Rohan my brothers. I see in your eyes the same fear that would take the heart of me. A day may come when the courage of men fails when we forsake our friends and break all bonds of fellowship but it is not this day. An hour of woes and shattered shields when the age of men comes crashing down but it is not this day. This day we fight! By all that you hold dear on this good earth I bid you stand, men of the west!")
+                        comment_replied_to.append(comment.id)
+
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                # if a smartass mentions the greatest tragedy: the tragedy of second breakfast
+                for keyword in breakfast:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("I dont think he knows about that")
+                        comment.reply(comment.author.name + " " + "you've already had it")
+                        comment_replied_to.append(comment.id)
+
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                # for hope of the fellowship winning
+                for keyword in hope:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("Ring")
+                        comment.reply(
+                            "No. There is still hope for Frodo. He needs time... And safe passage across the plains of Gorgoroth. We can give him that.'")
+                        comment_replied_to.append(comment.id)
+
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                # Gimli's axe is superior
+                for keyword in axe:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("Gimli is a chad")
+                        comment.reply(comment.author.name + " " + "you have my sword")
+                        comment_replied_to.append(comment.id)
+
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                # If someone says Aragorn plus Strider
+
+                # if some comedian says penis or dick
+                for keyword in humor:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("Shlong")
+                        comment.reply("You should be dead. That spear would have skewered a wild boar.")
+                        comment_replied_to.append(comment.id)
+
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+            # this is if no key phrases besides aragorn were found
+            for keyword in aragorn:
+                if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                    print("Breakfast has been found")
+                    list = ['I would have gone with you to the end into the very fires of Mordor.',
+                            'Not if we hold true to each other.', 'I thought I had wandered into a dream.',
+                            'I will not let the White city fall nor our people fail', 'FOR FRODO!!',
+                            'I will not let the White city fall nor our people fail.',
+                            '[Let us together rebuild this world that we may share in the days of peace.](https://www.youtube.com/watch?v=W6t9OF8_3n8)',
+                            'The best revenge is letting go and living well.',
+                            'Tis the lay of Luthien. The elf-maiden who gave her love to eren a mortal!',
+                            'HES TRYING TO BRING DOWN THE MOUNTAIN! GANDALF WE MUST TURN BACK!',
+                            'I swore to protect you.',
+                            'If by my life or death I can protect you, I will. You have my sword.', 'You have my sword'
+                                                                                                    'THE BEACONS OF MINAS TIRITH! THE BEACONS ARE LIT! GONDOR CALLS FOR AID!',
+                            'It is but a shadow and a thought that you love. I cannot give you what you seek',
+                            ' Sauron will not have forgotten the sword of Elendil. The blade that was broken shall return to minas Tirith.',
+                            'Murderers. Traitors. You would call upon them to fight? They believe in nothing. They answer to no one.',
+                            'If Sauron had the ring we would know it!',
+                            'No. There is still hope for Frodo. He needs time... And safe passage across the plains of Gorgoroth. We can give him that.',
+                            'Draw out Sauron\'s armies. Empty his lands. Then we gather our full strength and march on the Black Gate!',
+                            'Hold your ground, hold your ground. Sons of Gondor, of Rohan my brothers. I see in your eyes the same fear that would take the heart of me. A day may come when the courage of men fails when we forsake our friends and break all bonds of fellowship but it is not this day. An hour of woes and shattered shields when the age of men comes crashing down but it is not this day. This day we fight! By all that you hold dear on this good earth I bid you stand, men of the west!',
+                            'Let the lord of the Black Lands come forth, that justice be done upon him!',
+                            ' We have time. Every day Frodo moves closer to Mordor.',
+                            ' Then I shall die as one of them!',
+                            'My lady, there may come a time for valor without renown. Who then will your people look to in the last defense?',
+                            'You have some skill with a blade.',
+                            'You are a daughter of kings a shieldmaiden of Rohan. I do not think that will be your fate!',
+                            'They do not come to destroy Rohan\'s crops or villages. They come to destroy its people. Down to the last child.',
+                            'Its the beards.',
+                            'Open war is upon you whether you would risk it or not.',
+                            'Farmers, ferriers, stable boys. These are no soldiers.',
+                            ' It is an army bred for a single purpose, to destroy the world of men. They will be here by nightfall.',
+                            'They were once men. Great kings of men. Then Sauron the Deceiver gave to them nine rings of power. Blinded by their greed, they took them without question, one by one falling into darkness. Now they are slaves to his will. They are the Nazgul, ringwraiths, neither living nor dead. At all times they feel the presence of the Ring, drawn to the power of the one. They will never stop hunting you.',
+                            'You said you\'d bind yourself to me, forsaking the immortal life of your people.',
+                            ' Are you frightened?', 'I have seen the White City, long ago',
+                            'Frodos fate is no longer in our hands.',
+                            'A little more caution from you; that is no trinket you carry',
+                            'Indeed. I can avoid being seen if I wish, but to disappear entirely, that is a rare gift.',
+                            'You cannot wield it. None of us can. The One Ring answers to Sauron alone. It has no other master.',
+                            'The same blood flows in my veins. The same weakness.', 'I let Frodo go.',
+                            ' By nightfall these hills will be swarming with orcs!... We must reach the woods of Lothlórien.',
+                            'Boromir! Give the Ring to Frodo.',
+                            'They will look for his coming from the White Tower. But he will not return.',
+                            'Sam, do you know the Athelas plant?',
+                            ' I will not lead the Ring within a hundred leagues of your city.',
+                            '  You should be dead. That spear would have skewered a wild boar.',
+                            'He is passing into the Shadow World. He\'ll soon become a wraith like them.',
+                            'Frodo, I have lived most of my life surrounded by my enemies. I will be grateful to die among my friends.',
+                            'Why have you come?',
+                            'Not for ourselves. But we can give Frodo his chance if we keep Sauron\'s Eye fixed upon us. Keep him blind to all else that moves.',
+                            'You shall not enter the realm of Gondor.', 'I do not believe it! I will not!',
+                            'I summon you to fulfill your oath.',
+                            ' It has been remade... Fight for us... and regain your honor.',
+                            'What does your heart tell you?',
+                            'They have a better chance defending themselves here than at Edoras...',
+                            'Then what do you fear, My Lady?', 'He\'s not alone. Sam went with him.', 'Not a word.',
+                            'All Isengard is emptied.', 'Ten thousand strong at least.',
+                            'It is an army bred for a single purpose, to destroy the world of men. They will be here by nightfall.',
+                            'They will look for his coming from the White Tower. But he will not return.',
+                            ' Indeed. I can avoid being seen if I wish, but to disappear entirely, that is a rare gift.',
+                            'There is no strength in Gondor that can avail us',
+                            'I will not lead the Ring within a hundred leagues of your city!',
+                            comment.author.name + "," + "  "'the Argonath! Long have I desired to look upon the kings of old... My kin',
+                            ' That is our road. I suggest you take some rest and recover your strength, Master Dwarf',
+                            'No. Orcs patrol the eastern shore. We must wait for cover of darkness.',
+                            'We cross the lake at nightfall. Hide the boats and continue on foot. We approach Mordor from the north.',
+                            'Gentlemen, we do not stop til nightfal',
+                            'You said you\'d bind yourself to me. Forsaking the immortal life of your people.',
+                            'Come on, come on! Take cover!', 'Boromir! Give the Ring to Frodo.',
+                            ' The mines are no place for a pony, even one so brave as Bill.',
+                            'Get back! Stay close to Gandalf!',
+                            'Haldir o Lórien. Henion aníron, boe ammen i dulu lîn. Boe ammen veriad lîn.',
+                            ' Frodo’s fate is no longer in our hands.', 'Not idly do the leaves of Lorien fall',
+                            'Rohan, home of the horse-lords',
+                            'There\'s something strange at work here. Some evil gives speed to these creatures, sets it\'s will against us',
+                            'Legolas! What do your elf-eyes see?', 'Riders of Rohan! What news from the Mark?',
+                            'We are no spies. We track a band of Uruk-hai westward across the plains. They have taken two of our friends captive.',
+                            'They will be small, only children to your eyes',
+                            'Tracks lead away from the battle, into...Fangorn Forest.',
+                            'Do not let him speak. He will put a spell on us!', 'You fell!',
+                            'No my lord! No my lord. Let him go. Enough blood has been spilt on his account.',
+                            'You have 2000 good men riding north as we speak. Éomer is loyal to you. His men will return and fight for their king.',
+                            'He’s only doing what he thinks is best for his people. Helm’s Deep has saved them in the past.',
+                            'What do you fear my lady?',
+                            'King Théoden has a good memory. He was only a small child at the time.',
+                            'She stays because she still has hope.',
+                            'She is sailing to the Undying Lands with all that is left of her kin.',
+                            'Send out riders, my lord. You must call for aid.', 'Gondor will answer.',
+                            'Hurry! Inside. Get them inside!',
+                            ' You said this fortress would never fall while your men defend it. They still defend it. They have died defending it.',
+                            'Is there no other way for the women and children to get out of the caves? Is there no other way?',
+                            'For Rohan. For your people.',
+                            'One thing I have learned about Hobbits: They’re a most hardy folk.',
+                            'Will you ride with us?', 'Six thousand will not be enough to break the lines of Mordor.',
+                            'Every hour lost hastens Gondor’s defeat. We have till dawn, then we must ride.',
+                            'It will not be our end, but his.', 'Not this time. This time you must stay, Gimli.',
+                            'I do not fear death!', 'One who will have your allegiance.', 'You will suffer me.',
+                            'I summon you to fulfill your oath.',
+                            'I am Isildur’s heir. Fight for me, and I will hold your oaths fulfilled!',
+                            'What say you?! You have my word! Fight, and I will release you from this living death! ...What say you?!',
+                            'Legolas, fire a warning shot past the bosun’s ear.',
+                            ' I hold your oath fulfilled. Go. Be at peace.',
+                            'Not for ourselves. But we can give Frodo his chance if we keep Sauron’s Eye fixed upon us. Keep him blind to all else that moves.',
+                            ' Long have you hunted me. Long have I eluded you. No more...Behold the Sword of Elendil!',
+                            ' I do not believe it. I will not.']  # I honestly don't know how many quotes there are here if you anyone wants to count feel free to do it and please let me know ]
+                    random_item = random.choice(list)
+                    comment.reply(random_item)
+                    comment_replied_to.append(comment.id)
+
+                    with open("comment_replied_to.txt", "a") as f:
+                        f.write(comment.id + "\n")
+        for keyword in Strider:
+            if keyword in comment.body and comment.id not in comment_replied_to and comment.author not in comment_replied_to and comment.author != r.user.me():
+                print("Fat man")
+                comment.reply("'Strider' I am to one fat man who lives within a day's march of foes that would freeze his heart, or lay his little town in ruin, if he were not guarded ceaselessly.")
                 comment_replied_to.append(comment.id)
 
                 with open("comment_replied_to.txt", "a") as f:
                     f.write(comment.id + "\n")
-    print("sleeping for 10 seconds")
-    time.sleep(10)
-def run_bot(r, comment_replied_to):
-    for comment in r.subreddit('lotr').comments(limit=25):
-        for keyword in keywords:
-            if "!Aragorn-bot" in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
-                print( "aragorn has been found")
-                list = ['I WOULD HAVE GONE WITH YOU TO THE END INTO THE VERY FIRES OF MORDOR!',
-                        'NOT IF WE HOLD TRUE TO EACH OTHER!', 'I THOUGHT I HAD WANDERED INTO A DREAM!',
-                        'I WILL NOT LET THE WHITE CITY FALL NOR OUR PEOPLE FAIL!', 'FOR FRODO!!',
-                        'IF BY MY LIFE OR DEATH I CAN PROTECT YOU I WILL!',
-                        'YOU HAVE MY SWORD!', 'I DO NOT FEAR DEATH!', 'MY FRIENDS YOU BOW TO NO ONE!' , 'BUT I MUST ADMIT THAT I HOPED YOU WOULD TAKE TO ME FOR MY OWN SAKE. A HUNTED MAN SOMETIMES WEARIES OF DISTRUST AND LONGS FOR FRIENDSHIP. BUT THERE, I BELIEVE MY LOOKS ARE AGAINST ME.!' , 'FOR MY PART I FORGIVE YOUR DOUBT. LITTLE DO I RESEMBLE THE FIGURES OF ELENDIL AND ISILDUR AS THEY STAND CARVEN IN THIER MAJESTY IN THE HALLS OF DENETHOR. I AM BUT A HEIR OF ISILDUR, NOT ISILDUR HIMSELF. I HAVE HAD A HARD LIFE AND AND A LONG; AND THE LEAGUES THAT LIE BETWEEN HERE AND GONDOR ARE A SMALL PART IN THE COUNT OF MY JOURNEYS. I HAVE CROSSED MANY MOUNTAINS AND MANY RIVERS AND TRODDEN MANY PLAINS EVER INTO THE FAR COUNTRIES OF RHUN AND HARAD WHERE WHERE THE STARS ARE STRANGE!' ,
-                        'STAND YOUR GROUND, SONS OF GONDOR OF ROHAN MY BROTHERS. I SEE IN YOUR EYES THE SAME FEAR THAT WOULD TAKE THE HEART OF ME! A DAY MAY COME WHEN THE COURAGE OF MEN FAILS WHEN WE FORSAKE OUR FRIENDS AND BREAK ALL BONDS OF FELLOWSHIP BUT IT IS NOT THIS DAY!AN HOUR OF WOLVES AND SHATTERD SHIELDS WHEN THE AGE OF MEN COMES CRASHING DOWN BUT IT IS NOT THIS DAY, THIS DAY WE FIGHT!!! AND FOR ALL THAT IS DEAR TO YOU IN THIS WORLD I BID YOU STAND MEN OF THE WEST AND FIGHT!!! ' ,
-                        'RIDE OUT WITH ME. RIDE OUT AND MEET THEM.' , 'LONELY MEN ARE WE RANGERS OF THE WILD. HUNTERS – BUT HUNTERS EVER OF THE SERVANTS OF THE ENEMY; FOR THEY ARE FOUND IN MANY PLACES NOT IN MORDOR ONLY. ”STRIDER” AM I TO ONE FAT MAN WHO LIVES WITHIN A DAY´S MARCH OF FOES THAT WOULD FREEZE HIS HEART OR LAY HIS LITTLE TOWN IN RUIN IF HE WERE NOT GUARDED CEASELESSLY. YET WE WOULD NOT HAVE IT OTHERWISE. IF SIMPLE FOLK ARE FREE FROM CARE AND FEAR, SIMPLE THEY WILL BE AND WE MUST BE SECRET TO KEEP THEM SO. THAT HAS BEEN THE TASK OF MY KINDRED WHILE THE YEARS HAVE LENGTHENED AND THE GRASS HAS GROWN.' , 'War is upon you whether you risk it or not' , 'NOT IF WE HOLD TRUE TO EACH OTHER. WE WILL NOT ABANDON MERRY AND PIPPIN TO TORMENT AND DEATH. NOT WHILE WE HAVE STRENGTH LEFT. LEAVE ALL THAT CAN BE SPARED BEHIND. WE TRAVEL LIGHT. LET’S HUNT SOME ORC !' ,
-                        'I AM ISILDUR’S HEIR. FIGHT FOR ME! AND I WILL HOLD YOUR OATH FULFILLED! WHAT SAY YOU!?' , 'You will suffer me' ,
-                        'A HUNTED MAN SOMETIMES WEARIES OF DISTRUST AND LONGS FOR FRIENDSHIP. BUT THERE I BELIEVE MY LOOKS ARE AGAINST ME!' , 'BE AT PEACE SON OF GONDOR!!' ,
-                        'I WOULD HAVE GUIDED FRODO TO MORDOR AND GONE WITH HIM TO THE END!' , 'I DO NOT WANT THAT POWER. I HAVE NEVER WANTED IT!' , 'LET US TOGETHER REBUILD THIS WORLD THAT WE MAY SHARE IN THE DAYS OF PEACE!' ,
-                        'THE BEST REVENGE IS LETTING GO AND LIVING WELL!' , 'TIS THE LAY OF LUTHIEN. THE ELF-MAIDEN WHO GAVE HER LOVE TO BEREN A MORTAL!' , 'HES TRYING TO BRING DOWN THE MOUNTAIN! GANDALF WE MUST TURN BACK!' ,
-                        'I SWORE TO PROTECT YOU!' , 'THE BEACONS OF MINAS TIRITH! THE BEACONS ARE LIT! GONDOR CALLS FOR AID!' , 'IT IS BUT A SHADOW AND A THOUGHT THAT YOU LOVE. I CANNOT GIVE YOU WHAT YOU SEEK' , ' SAURON WILL NOT HAVE FORGOTTEN THE SWORD OF ELENDIL. THE BLADE THAT WAS BROKEN SHALL RETURN TO MINAS TIRITH!' ,
-                        'MURDERERS. TRAITORS. YOU WOULD CALL UPON THEM TO FIGHT? THEY BELIEVE IN NOTHING. THEY ANSWER TO NO ONE.' , 'IF SAURON HAD THE RING WE WOULD KNOW IT!' ,
-                        'NO. THERE IS STILL HOPE FOR FRODO. HE NEEDS TIME... AND SAFE PASSAGE ACROSS THE PLAINS OF GORGOROTH. WE CAN GIVE HIM THAT.' , 'DRAW OUT SAURONS ARMIES. EMPTY HIS LANDS. THEN WE GATHER OUR FULL STRENGTH AND MARCH ON THE BLACK GATE!' ,
-                        'HOLD YOUR GROUND, HOLD YOUR GROUND. SONS OF GONDOR, OF ROHAN MY BROTHERS. I SEE IN YOUR EYES THE SAME FEAR THAT WOULD TAKE THE HEART OF ME. A DAY MAY COME WHEN THE COURAGE OF MEN FAILS WHEN WE FORSAKE OUR FRIENDS AND BREAK ALL BONDS OF FELLOWSHIP BUT IT IS NOT THIS DAY. AN HOUR OF WOES AND SHATTERED SHIELDS WHEN THE AGE OF MEN COMES CRASHING DOWN BUT IT IS NOT THIS DAY. THIS DAY WE FIGHT! BY ALL THAT YOU HOLD DEAR ON THIS GOOD EARTH I BID YOU STAND, MEN OF THE WEST!' ,
-                        'Let the lord of the Black Lands come forth, that justice be done upon him!' , ' We have time. Every day Frodo moves closer to Mordor.' , ' THEN I SHALL DIE AS ONE OF THEM!' , 'MY LADY, THERE MAY COME A TIME FOR VALOR WITHOUT RENOWN. WHO THEN WILL YOUR PEOPLE LOOK TO IN THE LAST DEFENSE?' ,
-                        'YOU HAVE SOME SKILL WITH A BLADE' , 'YOU ARE A DAUGHTER OF KINGS A SHIELD MAIDEN OF ROHAN. I DO NOT THINK THAT WILL BE YOUR FATE!' , 'THEY DO NOT COME TO DESTROY ROHANS CROPS OR VILLAGES. THEY COME TO DESTROY ITS PEOPLE. DOWN TO THE LAST CHILD.' , 'ITS THE BEARDS!' ,
-                        'OPEN WAR IS UPON YOU WHETHER YOU WOULD RISK IT OR NOT!' , 'FARMERS, FERRIERS, STABLE BOYS. THESE ARE NO SOLDIERS.' , ' IT IS AN ARMY BRED FOR A SINGLE PURPOSE, TO DESTROY THE WORLD OF MEN. THEY WILL BE HERE BY NIGHTFALL.' ,
-                        'THEY WERE ONCE MEN. GREAT KINGS OF MEN. THEN SAURON THE DECEIVER GAVE TO THEM NINE RINGS OF POWER. BLINDED BY THEIR GREED, THEY TOOK THEM WITHOUT QUESTION, ONE BY ONE FALLING INTO DARKNESS. NOW THEY ARE SLAVES TO HIS WILL. THEY ARE THE NAZGUL, RINGWRAITHS, NEITHER LIVING NOR DEAD. AT ALL TIMES THEY FEEL THE PRESENCE OF THE RING, DRAWN TO THE POWER OF THE ONE. THEY WILL NEVER STOP HUNTING YOU.']
-                random_item = random.choice(list)
-                comment.reply(random_item)
-                comment_replied_to.append(comment.id)
 
-                with open("comment_replied_to.txt", "a") as f:
-                    f.write(comment.id + "\n")
-    print("sleeping for 10 seconds")
-    time.sleep(10)
+    print("Sleep")
 
 
 def get_saved_comments():
@@ -87,6 +250,7 @@ def get_saved_comments():
             comment_replied_to = f.read()
             comment_replied_to = comment_replied_to.split("\n")
     return comment_replied_to
+
 
 r = bot_login()
 comment_replied_to = get_saved_comments()
