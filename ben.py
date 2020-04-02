@@ -1,9 +1,8 @@
-# Shoutout to the u/Gandalf-bot for help on sentience!
-# 3/18/20 Edit 1: Added more quotes
 import praw
 import config
 import random
 import time
+import re
 import os
 
 
@@ -28,27 +27,168 @@ axe = ['Sword', 'sword']
 hope = ['Hope', 'hope']
 Strider = ['Strider', 'strider']
 humor = ['Penis', 'penis', 'dick', 'Dick']
-
-
+fellowship = ['fellowship has failed','it has been in vain', 'It has been in vain', 'Fellowship has failed']
+men = ['The world of Men will fall', 'the world of Men will fall', 'The world of men will fall', 'the world of men will fall', 'all will come to darkness', 'my city to ruin', 'My city to ruin']
+king = ['Now come the days of the king','now come the days of the king', 'now comes the days of the king', 'Now comes the days of the king']
+anduril = ['Andúril, Flame of the West, forged from the shards of Narsil', 'forged from the shards of Narsil', 'Forged from the shards of Narsil', 'forged from the shards of Narsil']
+mountain = ['There are those who dwell in the mountain', 'there are those who dwell in the mountain', 'dwell in the mountain']
+renown = ['To mind the children, to find food and bedding when the men return. What renown is there in that?', 'To mind the children to find food and bedding when the men return. What renown is there in that?', 'What renown is there in that']
+dwarf = ['dwarf women']
+war = ['open war']
+army = ['ten thousand']
+trumpets = ['silver trumpets']
+sad = ['my captain', 'my king', ' I would have followed you']
+victory = ['strength of arms']
+dead = ['that line was broken']
+oathbreaker = ['Who enters my domain']
+alliance = ['The old alliances are dead', ' lucky in our friends as you']
+toss = ['Don’t tell the Elf', 'dont tell the elf', 'toss me']
+boromir = ['suffer so much fear ', 'small a thing', 'Such a little thing.', 'It is a strange fate we should suffer so much fear and doubt over so small a thing. Such a little thing.']
 def run_bot(r, comment_replied_to):
-    for comment in r.subreddit('lotrmemes').comments(limit=25):
+    for comment in r.subreddit('lotrbot').comments(limit=25):
         for keyword in aragorn:  # look first for Aragorn if found then look for the any of the following otherwise proceed to last phase, just Aragorn
             if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                for keyword in oathbreaker:
+                    if re.search(r"\b(" + "|".join(oathbreaker) + r")\b",comment.body,re.IGNORECASE) and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("AAAAGH")
+                        comment.reply("One who will have your allegiance")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+
+                for keyword in alliance:
+                    if re.search(r"\b(" + "|".join(alliance) + r")\b",comment.body,re.IGNORECASE) and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("dshj")
+                        comment.reply("Gondor will answer.")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+
+                for keyword in toss:
+                    if re.search(r"\b(" + "|".join(toss) + r")\b",comment.body,re.IGNORECASE) and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("humor")
+                        comment.reply("Not a word")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+
+                for keyword in dead:
+                    if re.search(r"\b(" + "|".join(dead) + r")\b",comment.body,re.IGNORECASE) and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("Oathbreaker")
+                        comment.reply("It has been remade... Fight for us... and regain your honor... What say you?")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                for keyword in victory:
+                    if re.search(r"\b(" + "|".join(victory) + r")\b",comment.body,re.IGNORECASE) and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("Sauron")
+                        comment.reply("Draw out Sauron\'s armies. Empty his lands. Then we gather our full strength and march on the Black Gate!")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+
+                for keyword in sad:
+                    if re.search(r"\b(" + "|".join(sad) + r")\b",comment.body,re.IGNORECASE) and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("Aww")
+                        comment.reply("Be at peace, son of Gondor.")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+
+                for keyword in boromir:
+                    if re.search(r"\b(" + "|".join(boromir) + r")\b",comment.body,re.IGNORECASE) and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("Bormir!")
+                        comment.reply(comment.author.name + "!" + "  " + "Give the Ring to Frodo.")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                for keyword in trumpets:
+                    if re.search(r"\b(" + "|".join(trumpets) + r")\b",comment.body,re.IGNORECASE) and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("white")
+                        comment.reply("I have seen the White City, long ago.")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+
+                for keyword in army:
+                    if re.search(r"\b(" + "|".join(army) + r")\b",comment.body,re.IGNORECASE) and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("purpose")
+                        comment.reply("It is an army bred for a single purpose, to destroy the world of men. They will be here by nightfall.")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                #open war
+                for keyword in war:
+                    if re.search(r"\b(" + "|".join(war) + r")\b",comment.body,re.IGNORECASE) and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("war")
+                        comment.reply("Open war is upon you whether you would risk it or not.")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                # for mention of dwarf women
+                for keyoword in dwarf:
+                    if re.search(r"\b(" + "|".join(dwarf) + r")\b",comment.body,re.IGNORECASE) and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("smush")
+                        comment.reply("It’s the beards.")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                #When aragorn asked Lady Eowyn to go the caves with the ladies and the women
+                for keyword in renown:
+                    if re.search(r"\b(" + "|".join(renown) + r")\b",comment.body,re.IGNORECASE) and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("renown")
+                        comment.reply("My lady, a time may come for valor without renown. Who then will your people look to in the last defense?")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+
                 # this is for any thing related to gondor
                 for keyword in gondor_aragorn:
                     if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
                         print("GONDOR")  # you can ignore this line it is for me
-                        gondor = [
-                            'Stand your ground, sons of Gondor of Rohan my brothers. I see in your eyes the same fear that would take the heart of me! A day may come when the courage of men fails when we forsake our friends and break all bonds of fellowship but it is not this day! An hour of wolves and shattered shields when the age of men comes crashing down but it is not this day, this day we fight!!! And for all that is dear to you in this world I bid you stand men of the west and fight! ',
+                        gondor = ['Stand your ground, sons of Gondor of Rohan my brothers. I see in your eyes the same fear that would take the heart of me! A day may come when the courage of men fails when we forsake our friends and break all bonds of fellowship but it is not this day! An hour of wolves and shattered shields when the age of men comes crashing down but it is not this day, this day we fight!!! And for all that is dear to you in this world I bid you stand men of the west and fight! ',
                             'Be at peace son of Gondor.',
                             'THE BEACONS OF MINAS TIRITH! THE BEACONS ARE LIT! GONDOR CALLS FOR AID!',
-                            'You shall not enter the realm of Gondor.',
+                            'You may go no further. You will not enter Gondor.',
                             'I will not let the White city fall nor our people fail',
                             'There is no strength in Gondor that can avail us']  # these are the quotes that it will say when Gondor is found
                         random_item = random.choice(gondor)  # choose a random quote from the phrases
                         comment.reply(random_item)  # reply to the comment
-                        comment_replied_to.append(
-                            comment.id)  # I'm going to be honest I have no idea what the following lines code do. All I know is without it the bot starts to spam
+                        comment_replied_to.append(comment.id)  # I'm going to be honest I have no idea what the following lines code do. All I know is without it the bot starts to spam
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                #for the ghost people
+                for keyword in mountain:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("Oath breakers")
+                        comment.reply("Murderers… traitors! You would call upon them to fight? They believe in nothing! They answer to no one!")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+
+                # regarding anduril
+                for keyword in anduril:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("Elendil")
+                        comment.reply("Sauron will not have forgotten the sword of Elendil. The blade that was broken shall return to minas Tirith.")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                # for the days of the king
+                for keyword in king:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("May they be blessed")
+                        comment.reply("This day does not belong to one man but to all. Let us together rebuild this world, that we may share in the days of peace.")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+
+                # for the failing of the white city
+                for keyword in men:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("White city")
+                        comment.reply("I do not know what strength is in my blood, but I swear to you I will not let the White City fall, nor our people fail.")
+                        comment_replied_to.append(comment.id)
                         with open("comment_replied_to.txt", "a") as f:
                             f.write(comment.id + "\n")
 
@@ -57,6 +197,14 @@ def run_bot(r, comment_replied_to):
                     if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
                         print("Gondor calls ")
                         comment.reply("THE BEACONS OF MINAS TIRITH! THE BEACONS ARE LIT! GONDOR CALLS FOR AID!")
+                        comment_replied_to.append(comment.id)
+                        with open("comment_replied_to.txt", "a") as f:
+                            f.write(comment.id + "\n")
+                #if the fellowship was in vain
+                for keyword in fellowship:
+                    if keyword in comment.body and comment.id not in comment_replied_to and not comment.author == r.user.me:
+                        print("Nay Gimli")
+                        comment.reply("Not if we hold true to each other. We will not abandon Merry and Pippin to torment and death. Not while we have strength left. Leave all that can be spared behind. We travel light. Let’s hunt some Orc.")
                         comment_replied_to.append(comment.id)
                         with open("comment_replied_to.txt", "a") as f:
                             f.write(comment.id + "\n")
@@ -128,7 +276,7 @@ def run_bot(r, comment_replied_to):
                             'I will not let the White city fall nor our people fail.',
                             '[Let us together rebuild this world that we may share in the days of peace.](https://www.youtube.com/watch?v=W6t9OF8_3n8)',
                             'The best revenge is letting go and living well.',
-                            'Tis the lay of Luthien. The elf-maiden who gave her love to eren a mortal!',
+                            'Tis the lay of Luthien. The elf-maiden who gave her love to Beren a mortal!',
                             'HES TRYING TO BRING DOWN THE MOUNTAIN! GANDALF WE MUST TURN BACK!',
                             'I swore to protect you.',
                             'If by my life or death I can protect you, I will. You have my sword.', 'You have my sword'
@@ -169,7 +317,7 @@ def run_bot(r, comment_replied_to):
                             'Frodo, I have lived most of my life surrounded by my enemies. I will be grateful to die among my friends.',
                             'Why have you come?',
                             'Not for ourselves. But we can give Frodo his chance if we keep Sauron\'s Eye fixed upon us. Keep him blind to all else that moves.',
-                            'You shall not enter the realm of Gondor.', 'I do not believe it! I will not!',
+                            'You may go no further. You will not enter Gondor.', 'I do not believe it! I will not!',
                             'I summon you to fulfill your oath.',
                             ' It has been remade... Fight for us... and regain your honor.',
                             'What does your heart tell you?',
